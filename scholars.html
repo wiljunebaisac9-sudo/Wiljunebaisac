@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Scholars | Scholarship Monitoring</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/scholars.js" defer></script>
+
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                S
+            </div>
+
+            <div>
+                <h2>Scholarship</h2>
+                <small>Monitoring System</small>
+            </div>
+
+        </div>
+
+        <div class="nav-title">
+            Main Menu
+        </div>
+
+        <a href="dashboard.html" class="nav-link">
+            <span class="nav-icon">▣</span>
+            Dashboard
+        </a>
+
+        <a href="scholars.html" class="nav-link active">
+            <span class="nav-icon">♙</span>
+            Scholars
+        </a>
+
+        <a href="scholarships.html" class="nav-link">
+            <span class="nav-icon">◆</span>
+            Scholarship Programs
+        </a>
+
+        <a href="grades.html" class="nav-link">
+            <span class="nav-icon">▤</span>
+            Grade Submissions
+        </a>
+
+        <a href="compliance.html" class="nav-link">
+            <span class="nav-icon">✓</span>
+            Compliance
+        </a>
+
+        <div class="sidebar-bottom">
+
+            <button
+                class="btn logout-btn"
+                onclick="logout()"
+            >
+                ⇥ Logout
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <div>
+
+                <h1>Scholars</h1>
+
+                <p>
+                    Manage registered scholarship recipients
+                </p>
+
+            </div>
+
+            <div class="user-box">
+
+                <div class="user-avatar">
+                    A
+                </div>
+
+                <div>
+
+                    <div
+                        class="user-name"
+                        id="userName"
+                    >
+                        Administrator
+                    </div>
+
+                    <div class="user-role">
+                        System Administrator
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <section class="content">
+
+            <!-- PAGE HEADER -->
+
+            <div class="page-header">
+
+                <div>
+
+                    <h2>
+                        Scholar Management
+                    </h2>
+
+                    <p>
+                        Register, update, search, and monitor scholars.
+                    </p>
+
+                </div>
+
+                <div class="actions">
+
+                    <button
+                        class="btn btn-primary"
+                        onclick="openScholarModal()"
+                    >
+                        + Add Scholar
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- SEARCH / FILTER -->
+
+            <div class="panel">
+
+                <div class="panel-body">
+
+                    <div class="search-bar">
+
+                        <input
+                            type="text"
+                            id="searchInput"
+                            placeholder="Search by Student ID or name..."
+                        >
+
+                        <select id="statusFilter">
+
+                            <option value="">
+                                All Statuses
+                            </option>
+
+                            <option value="Active">
+                                Active
+                            </option>
+
+                            <option value="Pending Submission">
+                                Pending Submission
+                            </option>
+
+                            <option value="For Verification">
+                                For Verification
+                            </option>
+
+                            <option value="Compliant">
+                                Compliant
+                            </option>
+
+                            <option value="With Deficiency">
+                                With Deficiency
+                            </option>
+
+                            <option value="Probationary">
+                                Probationary
+                            </option>
+
+                            <option value="For Renewal">
+                                For Renewal
+                            </option>
+
+                            <option value="Renewed">
+                                Renewed
+                            </option>
+
+                            <option value="Disqualified">
+                                Disqualified
+                            </option>
+
+                        </select>
+
+                        <select id="scholarshipFilter">
+
+                            <option value="">
+                                All Scholarships
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <br>
+
+
+            <!-- SCHOLAR TABLE -->
+
+            <div class="panel">
+
+                <div class="panel-header">
+
+                    <div>
+
+                        <h3>
+                            Registered Scholars
+                        </h3>
+
+                    </div>
+
+                    <span
+                        id="scholarCount"
+                        class="badge badge-active"
+                    >
+                        0 Scholars
+                    </span>
+
+                </div>
+
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Student ID
+                                </th>
+
+                                <th>
+                                    Scholar Name
+                                </th>
+
+                                <th>
+                                    Degree Program
+                                </th>
+
+                                <th>
+                                    Year
+                                </th>
+
+                                <th>
+                                    Scholarship
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th>
+                                    Actions
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="scholarsTable">
+
+                            <tr>
+
+                                <td colspan="7">
+
+                                    <div class="empty-state">
+                                        Loading scholars...
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- ADD / EDIT SCHOLAR MODAL -->
+
+<div
+    class="modal"
+    id="scholarModal"
+>
+
+    <div class="modal-card">
+
+        <div class="modal-header">
+
+            <h3 id="modalTitle">
+                Add Scholar
+            </h3>
+
+            <button
+                class="close-btn"
+                onclick="closeScholarModal()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="modal-body">
+
+            <form id="scholarForm">
+
+                <input
+                    type="hidden"
+                    id="scholarId"
+                >
+
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+
+                        <label>
+                            Student ID *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="studentId"
+                            placeholder="e.g. 2026-0001"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Full Name *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="fullName"
+                            placeholder="Enter full name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Degree Program *
+                        </label>
+
+                        <input
+                            type="text"
+                            id="degreeProgram"
+                            placeholder="e.g. BS Information Technology"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Year Level *
+                        </label>
+
+                        <select
+                            id="yearLevel"
+                            required
+                        >
+
+                            <option value="">
+                                Select Year
+                            </option>
+
+                            <option value="1">
+                                1st Year
+                            </option>
+
+                            <option value="2">
+                                2nd Year
+                            </option>
+
+                            <option value="3">
+                                3rd Year
+                            </option>
+
+                            <option value="4">
+                                4th Year
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Scholarship Program *
+                        </label>
+
+                        <select
+                            id="scholarshipId"
+                            required
+                        >
+
+                            <option value="">
+                                Select Scholarship
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Status
+                        </label>
+
+                        <select id="scholarStatus">
+
+                            <option value="Active">
+                                Active
+                            </option>
+
+                            <option value="Pending Submission">
+                                Pending Submission
+                            </option>
+
+                            <option value="For Verification">
+                                For Verification
+                            </option>
+
+                            <option value="Compliant">
+                                Compliant
+                            </option>
+
+                            <option value="With Deficiency">
+                                With Deficiency
+                            </option>
+
+                            <option value="Probationary">
+                                Probationary
+                            </option>
+
+                            <option value="For Renewal">
+                                For Renewal
+                            </option>
+
+                            <option value="Renewed">
+                                Renewed
+                            </option>
+
+                            <option value="Disqualified">
+                                Disqualified
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <br>
+
+
+                <div
+                    style="
+                        display:flex;
+                        justify-content:flex-end;
+                        gap:10px;
+                    "
+                >
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        onclick="closeScholarModal()"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+                        Save Scholar
+                    </button>
+
+                </div>
+
+
+                <p
+                    id="formMessage"
+                    class="message"
+                ></p>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

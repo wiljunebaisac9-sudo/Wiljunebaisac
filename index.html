@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Scholarship Monitoring System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100%;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f6fb;
+            color: #1e293b;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 250px;
+            background: #111827;
+            color: white;
+            padding: 25px 16px;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 5px 10px 30px;
+        }
+
+        .logo {
+            width: 44px;
+            height: 44px;
+            background: #6366f1;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .brand h2 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .brand p {
+            margin: 3px 0 0;
+            color: #94a3b8;
+            font-size: 11px;
+        }
+
+        .menu-title {
+            color: #94a3b8;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 10px 12px;
+            text-transform: uppercase;
+        }
+
+        .navigation {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .nav-button {
+            width: 100%;
+            min-height: 45px;
+            border: 0;
+            outline: none;
+            background: transparent;
+            color: #cbd5e1;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            font-size: 14px;
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: left;
+            cursor: pointer;
+            pointer-events: auto;
+        }
+
+        .nav-button:hover {
+            background: #1e293b;
+            color: white;
+        }
+
+        .nav-button.active {
+            background: #6366f1;
+            color: white;
+        }
+
+        .icon {
+            width: 22px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .logout {
+            margin-top: auto;
+            width: 100%;
+            height: 45px;
+            border: 0;
+            border-radius: 9px;
+            background: #ef4444;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            pointer-events: auto;
+        }
+
+        .logout:hover {
+            background: #dc2626;
+        }
+
+        /* MAIN */
+        .main {
+            margin-left: 250px;
+            min-height: 100vh;
+        }
+
+        /* TOPBAR */
+        .topbar {
+            height: 82px;
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 0 35px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .topbar h1 {
+            margin: 0;
+            font-size: 25px;
+        }
+
+        .topbar p {
+            margin: 5px 0 0;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        .admin {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background: #6366f1;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .admin strong {
+            display: block;
+            font-size: 13px;
+        }
+
+        .admin span {
+            display: block;
+            color: #64748b;
+            font-size: 11px;
+            margin-top: 3px;
+        }
+
+        /* CONTENT */
+        .content {
+            padding: 30px 35px;
+        }
+
+        .heading {
+            margin-bottom: 25px;
+        }
+
+        .heading h2 {
+            margin: 0 0 5px;
+            font-size: 20px;
+        }
+
+        .heading p {
+            margin: 0;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        /* CARDS */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 20px;
+            min-height: 115px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, .03);
+        }
+
+        .card p {
+            margin: 0 0 8px;
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        .card h3 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .card-icon {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+
+        /* PANELS */
+        .panels {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        .panel {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        .panel-head {
+            padding: 20px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-head h3 {
+            margin: 0 0 5px;
+            font-size: 16px;
+        }
+
+        .panel-head p {
+            margin: 0;
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        .view-button {
+            border: 0;
+            background: #6366f1;
+            color: white;
+            border-radius: 7px;
+            padding: 9px 14px;
+            cursor: pointer;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f8fafc;
+            color: #64748b;
+            font-size: 11px;
+            text-align: left;
+            padding: 13px 18px;
+        }
+
+        td {
+            border-top: 1px solid #f1f5f9;
+            padding: 16px 18px;
+            font-size: 12px;
+        }
+
+        .empty {
+            text-align: center;
+            color: #94a3b8;
+            padding: 35px;
+        }
+
+        .status {
+            padding: 25px;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        @media (max-width: 1100px) {
+            .cards {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .panels {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .sidebar {
+                width: 210px;
+            }
+
+            .main {
+                margin-left: 210px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="logo">S</div>
+
+            <div>
+                <h2>Scholarship</h2>
+                <p>Monitoring System</p>
+            </div>
+        </div>
+
+        <div class="menu-title">
+            Main Menu
+        </div>
+
+        <div class="navigation">
+
+            <button
+                type="button"
+                class="nav-button active"
+                onclick="openPage('dashboard.html')">
+
+                <span class="icon">▣</span>
+                Dashboard
+
+            </button>
+
+            <button
+                type="button"
+                class="nav-button"
+                onclick="openPage('scholars.html')">
+
+                <span class="icon">♙</span>
+                Scholars
+
+            </button>
+
+            <button
+                type="button"
+                class="nav-button"
+                onclick="openPage('scholarships.html')">
+
+                <span class="icon">◆</span>
+                Scholarship Programs
+
+            </button>
+
+            <button
+                type="button"
+                class="nav-button"
+                onclick="openPage('grades.html')">
+
+                <span class="icon">▤</span>
+                Grade Submissions
+
+            </button>
+
+            <button
+                type="button"
+                class="nav-button"
+                onclick="openPage('compliance.html')">
+
+                <span class="icon">✓</span>
+                Compliance
+
+            </button>
+
+        </div>
+
+        <button
+            type="button"
+            class="logout"
+            onclick="logoutUser()">
+
+            ⇥ &nbsp; Logout
+
+        </button>
+
+    </aside>
+
+
+    <!-- MAIN -->
+    <main class="main">
+
+        <header class="topbar">
+
+            <div>
+                <h1>Dashboard</h1>
+                <p>Scholarship monitoring overview</p>
+            </div>
+
+            <div class="admin">
+
+                <div class="avatar">
+                    A
+                </div>
+
+                <div>
+                    <strong>Administrator</strong>
+                    <span>System Administrator</span>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <section class="content">
+
+            <div class="heading">
+                <h2>Overview</h2>
+                <p>
+                    Monitor scholars, grades, and scholarship compliance.
+                </p>
+            </div>
+
+
+            <!-- STATISTICS -->
+            <div class="cards">
+
+                <div class="card">
+                    <p>Total Scholars</p>
+                    <h3 id="totalScholars">0</h3>
+                    <div class="card-icon">♙</div>
+                </div>
+
+                <div class="card">
+                    <p>Pending Submissions</p>
+                    <h3 id="pendingSubmissions">0</h3>
+                    <div class="card-icon">◷</div>
+                </div>
+
+                <div class="card">
+                    <p>Verified</p>
+                    <h3 id="verified">0</h3>
+                    <div class="card-icon">✓</div>
+                </div>
+
+                <div class="card">
+                    <p>Compliant</p>
+                    <h3 id="compliant">0</h3>
+                    <div class="card-icon">★</div>
+                </div>
+
+                <div class="card">
+                    <p>With Deficiency</p>
+                    <h3 id="deficiency">0</h3>
+                    <div class="card-icon">!</div>
+                </div>
+
+            </div>
+
+
+            <!-- PANELS -->
+            <div class="panels">
+
+                <div class="panel">
+
+                    <div class="panel-head">
+
+                        <div>
+                            <h3>Recent Grade Submissions</h3>
+                            <p>Latest academic records.</p>
+                        </div>
+
+                        <button
+                            type="button"
+                            class="view-button"
+                            onclick="openPage('grades.html')">
+
+                            View All
+
+                        </button>
+
+                    </div>
+
+                    <div class="table-wrap">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>Scholar</th>
+                                    <th>Academic Year</th>
+                                    <th>Semester</th>
+                                    <th>GWA</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                <tr>
+                                    <td colspan="5" class="empty">
+                                        No grade submissions yet.
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="panel-head">
+
+                        <div>
+                            <h3>Scholar Status</h3>
+                            <p>Compliance overview.</p>
+                        </div>
+
+                    </div>
+
+                    <div class="status">
+                        No status information yet.
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- SUPABASE -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+
+    <script>
+
+        supabaseClient.auth.getSession().then(({ data: { session } }) => {
+            window.location.replace(
+                session ? "dashboard.html" : "login.html"
+            );
+        });
+
+        /* NAVIGATION */
+
+        function openPage(page) {
+            window.location.href = page;
+        }
+
+
+        /* LOGOUT */
+
+        async function logoutUser() {
+
+            const answer = confirm(
+                "Are you sure you want to logout?"
+            );
+
+            if (!answer) {
+                return;
+            }
+
+            try {
+
+                const result =
+                    await supabaseClient.auth.signOut();
+
+                if (result.error) {
+
+                    console.error(result.error);
+
+                    alert(
+                        "Logout failed: " +
+                        result.error.message
+                    );
+
+                    return;
+                }
+
+                window.location.replace("index.html");
+
+            } catch (error) {
+
+                console.error(error);
+
+                window.location.replace("index.html");
+
+            }
+
+        }
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In | Scholarship Monitoring</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+            background: #f4f6fb;
+            color: #1e293b;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        main {
+            width: min(100%, 420px);
+            padding: 36px;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            box-shadow: 0 12px 36px rgba(15, 23, 42, .08);
+        }
+        h1 { margin: 0 0 8px; font-size: 24px; }
+        .subtitle { margin: 0 0 28px; color: #64748b; font-size: 14px; }
+        label { display: block; margin: 18px 0 7px; font-size: 13px; font-weight: 600; }
+        input {
+            width: 100%;
+            min-height: 44px;
+            padding: 10px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            color: inherit;
+            font: inherit;
+        }
+        input:focus { outline: 2px solid #2563eb; outline-offset: 1px; }
+        button {
+            width: 100%;
+            min-height: 44px;
+            margin-top: 24px;
+            border: 0;
+            border-radius: 6px;
+            background: #2563eb;
+            color: #fff;
+            font: inherit;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        button:hover { background: #1d4ed8; }
+        button:disabled { cursor: wait; opacity: .7; }
+        #loginMessage { min-height: 20px; margin: 14px 0 0; font-size: 13px; }
+        @media (max-width: 480px) { main { padding: 26px 22px; } }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/login.js" defer></script>
+</head>
+<body>
+    <main>
+        <h1>Scholarship Monitoring</h1>
+        <p class="subtitle">Sign in to manage scholarship records.</p>
+        <form id="loginForm">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" autocomplete="username" required>
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" autocomplete="current-password" required>
+            <button id="loginBtn" type="submit">Sign in</button>
+            <p id="loginMessage" role="status" aria-live="polite"></p>
+        </form>
+    </main>
+</body>
+</html>

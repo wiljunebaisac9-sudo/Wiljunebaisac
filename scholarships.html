@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Scholarship Programs</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/scholarships.js" defer></script>
+
+</head>
+
+<body>
+
+<div class="app">
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">S</div>
+
+            <div>
+                <h2>Scholarship</h2>
+                <small>Monitoring System</small>
+            </div>
+
+        </div>
+
+        <div class="nav-title">
+            Main Menu
+        </div>
+
+        <a href="dashboard.html" class="nav-link">
+            <span class="nav-icon">▣</span>
+            Dashboard
+        </a>
+
+        <a href="scholars.html" class="nav-link">
+            <span class="nav-icon">♙</span>
+            Scholars
+        </a>
+
+        <a href="scholarships.html" class="nav-link active">
+            <span class="nav-icon">◆</span>
+            Scholarship Programs
+        </a>
+
+        <a href="grades.html" class="nav-link">
+            <span class="nav-icon">▤</span>
+            Grade Submissions
+        </a>
+
+        <a href="compliance.html" class="nav-link">
+            <span class="nav-icon">✓</span>
+            Compliance
+        </a>
+
+        <div class="sidebar-bottom">
+
+            <button
+                class="btn logout-btn"
+                onclick="logout()"
+            >
+                ⇥ Logout
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <div>
+
+                <h1>Scholarship Programs</h1>
+
+                <p>
+                    Manage academic scholarship requirements
+                </p>
+
+            </div>
+
+            <div class="user-box">
+
+                <div class="user-avatar">A</div>
+
+                <div>
+
+                    <div
+                        class="user-name"
+                        id="userName"
+                    >
+                        Administrator
+                    </div>
+
+                    <div class="user-role">
+                        System Administrator
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <section class="content">
+
+            <div class="page-header">
+
+                <div>
+
+                    <h2>Scholarship Requirements</h2>
+
+                    <p>
+                        Configure the rules used for compliance evaluation.
+                    </p>
+
+                </div>
+
+                <div class="actions">
+
+                    <button
+                        class="btn btn-primary"
+                        onclick="openProgramModal()"
+                    >
+                        + Add Program
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="panel">
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Program</th>
+                                <th>Required GWA</th>
+                                <th>Minimum Units</th>
+                                <th>Failing Grades</th>
+                                <th>Status</th>
+                                <th>Action</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="programTable">
+
+                            <tr>
+
+                                <td colspan="6">
+
+                                    <div class="empty-state">
+                                        Loading programs...
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- MODAL -->
+
+<div
+    class="modal"
+    id="programModal"
+>
+
+    <div class="modal-card">
+
+        <div class="modal-header">
+
+            <h3 id="programModalTitle">
+                Add Scholarship Program
+            </h3>
+
+            <button
+                class="close-btn"
+                onclick="closeProgramModal()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="modal-body">
+
+            <form id="programForm">
+
+                <input
+                    type="hidden"
+                    id="programId"
+                >
+
+
+                <div class="form-group">
+
+                    <label>
+                        Program Name *
+                    </label>
+
+                    <input
+                        type="text"
+                        id="programName"
+                        placeholder="Enter scholarship name"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+
+                        <label>
+                            Required GWA *
+                        </label>
+
+                        <input
+                            type="number"
+                            id="requiredGwa"
+                            step="0.01"
+                            min="1"
+                            max="5"
+                            placeholder="e.g. 1.75"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Minimum Units *
+                        </label>
+
+                        <input
+                            type="number"
+                            id="minUnits"
+                            min="0"
+                            placeholder="e.g. 18"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Allow Failing Grade?
+                    </label>
+
+                    <select id="allowFailing">
+
+                        <option value="false">
+                            No
+                        </option>
+
+                        <option value="true">
+                            Yes
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Status
+                    </label>
+
+                    <select id="programActive">
+
+                        <option value="true">
+                            Active
+                        </option>
+
+                        <option value="false">
+                            Inactive
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="btn btn-primary btn-full"
+                >
+                    Save Program
+                </button>
+
+
+                <p
+                    id="programMessage"
+                    class="message"
+                ></p>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
